@@ -33,6 +33,7 @@ namespace BtcE
 
     public class BtceApi
     {
+        public static int apiTick = 1;
         string key;
         HMACSHA512 hashMaker;
         UInt32 nonce;
@@ -50,9 +51,13 @@ namespace BtcE
             });
             var result = JObject.Parse(resultStr);
             if (result.Value<int>("success") == 0)
-                throw new Exception(result.Value<string>("error"));
+            {
+                apiTick += 1;
+            }
+            //throw new Exception(result.Value<string>("error"));
             return UserInfo.ReadFromJObject(result["return"] as JObject);
         }
+
 
         public TransHistory GetTransHistory(
             int? from = null,
